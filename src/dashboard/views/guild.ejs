@@ -1,0 +1,721 @@
+<div class="dashboard-container">
+  <div class="guild-header">
+    <div class="guild-info">
+      <img
+        src="<%= guild.iconURL() || 'https://cdn.discordapp.com/embed/avatars/0.png' %>"
+        alt="<%= guild.name %>"
+        class="guild-icon"
+      />
+      <div>
+        <h1><%= guild.name %></h1>
+        <p class="guild-id">ID: <%= guild.id %></p>
+      </div>
+    </div>
+    <div class="guild-stats">
+      <div class="stat-item">
+        <i class="fas fa-users"></i>
+        <span><%= guild.memberCount %> membres</span>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-hashtag"></i>
+        <span><%= guild.channels.cache.size %> canaux</span>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-crown"></i>
+        <span><%= guild.roles.cache.size %> rôles</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="config-tabs">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="general">
+        <i class="fas fa-cog"></i>
+        Général
+      </button>
+      <button class="tab-btn" data-tab="moderation">
+        <i class="fas fa-shield-alt"></i>
+        Modération
+      </button>
+      <button class="tab-btn" data-tab="economy">
+        <i class="fas fa-coins"></i>
+        Économie
+      </button>
+      <button class="tab-btn" data-tab="leveling">
+        <i class="fas fa-chart-line"></i>
+        Niveaux
+      </button>
+      <button class="tab-btn" data-tab="welcome">
+        <i class="fas fa-door-open"></i>
+        Bienvenue
+      </button>
+    </div>
+
+    <div class="tab-content">
+      <!-- Onglet Général -->
+      <div class="tab-pane active" id="general">
+        <div class="config-section">
+          <h3>Configuration générale</h3>
+          <form class="config-form" id="general-form">
+            <div class="form-group">
+              <label for="language">Langue du bot</label>
+              <select id="language" name="language">
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="timezone">Fuseau horaire</label>
+              <select id="timezone" name="timezone">
+                <option value="Europe/Paris">Europe/Paris</option>
+                <option value="UTC">UTC</option>
+                <option value="America/New_York">America/New_York</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="logChannel">Canal des logs généraux</label>
+              <select id="logChannel" name="logChannel">
+                <option value="">Aucun</option>
+                <% guild.channels.cache.filter(c => c.type ===
+                0).forEach(channel => { %>
+                <option value="<%= channel.id %>">#<%= channel.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Onglet Modération -->
+      <div class="tab-pane" id="moderation">
+        <div class="config-section">
+          <h3>Configuration de la modération</h3>
+          <form class="config-form" id="moderation-form">
+            <div class="form-group">
+              <label for="modLogChannel">Canal des logs de modération</label>
+              <select id="modLogChannel" name="modLogChannel">
+                <option value="">Aucun</option>
+                <% guild.channels.cache.filter(c => c.type ===
+                0).forEach(channel => { %>
+                <option value="<%= channel.id %>">#<%= channel.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="autoMod">Modération automatique</label>
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="autoMod" value="spam" />
+                  <span>Anti-spam</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="autoMod" value="links" />
+                  <span>Anti-liens</span>
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" name="autoMod" value="caps" />
+                  <span>Anti-majuscules</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="muteRole">Rôle de mute</label>
+              <select id="muteRole" name="muteRole">
+                <option value="">Aucun</option>
+                <% guild.roles.cache.forEach(role => { %>
+                <option value="<%= role.id %>"><%= role.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Onglet Économie -->
+      <div class="tab-pane" id="economy">
+        <div class="config-section">
+          <h3>Configuration de l'économie</h3>
+          <form class="config-form" id="economy-form">
+            <div class="form-group">
+              <label for="currencyName">Nom de la monnaie</label>
+              <input
+                type="text"
+                id="currencyName"
+                name="currencyName"
+                value="coins"
+              />
+            </div>
+            <div class="form-group">
+              <label for="currencySymbol">Symbole de la monnaie</label>
+              <input
+                type="text"
+                id="currencySymbol"
+                name="currencySymbol"
+                value="🪙"
+                maxlength="3"
+              />
+            </div>
+            <div class="form-group">
+              <label for="dailyAmount">Récompense quotidienne</label>
+              <input
+                type="number"
+                id="dailyAmount"
+                name="dailyAmount"
+                value="100"
+                min="1"
+                max="10000"
+              />
+            </div>
+            <div class="form-group">
+              <label for="workAmount">Récompense de travail</label>
+              <input
+                type="number"
+                id="workAmount"
+                name="workAmount"
+                value="50"
+                min="1"
+                max="1000"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Onglet Niveaux -->
+      <div class="tab-pane" id="leveling">
+        <div class="config-section">
+          <h3>Configuration des niveaux</h3>
+          <form class="config-form" id="leveling-form">
+            <div class="form-group">
+              <label for="levelChannel">Canal des annonces de niveau</label>
+              <select id="levelChannel" name="levelChannel">
+                <option value="">Aucun</option>
+                <% guild.channels.cache.filter(c => c.type ===
+                0).forEach(channel => { %>
+                <option value="<%= channel.id %>">#<%= channel.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="xpPerMessage">XP par message</label>
+              <input
+                type="number"
+                id="xpPerMessage"
+                name="xpPerMessage"
+                value="15"
+                min="1"
+                max="100"
+              />
+            </div>
+            <div class="form-group">
+              <label for="xpCooldown">Cooldown XP (secondes)</label>
+              <input
+                type="number"
+                id="xpCooldown"
+                name="xpCooldown"
+                value="60"
+                min="10"
+                max="300"
+              />
+            </div>
+            <div class="form-group">
+              <label for="levelRewards">Récompenses de niveau</label>
+              <div class="rewards-list">
+                <div class="reward-item">
+                  <input
+                    type="number"
+                    name="rewardLevel[]"
+                    placeholder="Niveau"
+                    min="1"
+                  />
+                  <select name="rewardType[]">
+                    <option value="role">Rôle</option>
+                    <option value="coins">Coins</option>
+                  </select>
+                  <input
+                    type="text"
+                    name="rewardValue[]"
+                    placeholder="Valeur"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm remove-reward"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                id="add-reward"
+              >
+                <i class="fas fa-plus"></i>
+                Ajouter une récompense
+              </button>
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Onglet Bienvenue -->
+      <div class="tab-pane" id="welcome">
+        <div class="config-section">
+          <h3>Configuration des messages de bienvenue</h3>
+          <form class="config-form" id="welcome-form">
+            <div class="form-group">
+              <label for="welcomeChannel">Canal de bienvenue</label>
+              <select id="welcomeChannel" name="welcomeChannel">
+                <option value="">Aucun</option>
+                <% guild.channels.cache.filter(c => c.type ===
+                0).forEach(channel => { %>
+                <option value="<%= channel.id %>">#<%= channel.name %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="welcomeMessage">Message de bienvenue</label>
+              <textarea
+                id="welcomeMessage"
+                name="welcomeMessage"
+                rows="4"
+                placeholder="Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !"
+              >
+Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
+              >
+              <small
+                >Variables disponibles: {user}, {server}, {memberCount}</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="welcomeEmbed">Utiliser un embed</label>
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input
+                    type="checkbox"
+                    id="welcomeEmbed"
+                    name="welcomeEmbed"
+                    value="true"
+                  />
+                  <span>Activer</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="welcomeColor">Couleur de l'embed</label>
+              <input
+                type="color"
+                id="welcomeColor"
+                name="welcomeColor"
+                value="#7289da"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .guild-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+  }
+
+  .guild-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .guild-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+  }
+
+  .guild-info h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .guild-id {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .guild-stats {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .stat-item i {
+    color: var(--primary-color);
+  }
+
+  .config-tabs {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .tab-nav {
+    display: flex;
+    background-color: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+  }
+
+  .tab-btn:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .tab-content {
+    padding: 2rem;
+  }
+
+  .tab-pane {
+    display: none;
+  }
+
+  .tab-pane.active {
+    display: block;
+  }
+
+  .config-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+  }
+
+  .config-form {
+    max-width: 600px;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .checkbox input[type="checkbox"] {
+    width: auto;
+  }
+
+  .rewards-list {
+    margin-bottom: 1rem;
+  }
+
+  .reward-item {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+  }
+
+  .reward-item input,
+  .reward-item select {
+    flex: 1;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #c53030;
+  }
+
+  small {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async function () {
+    // Charger la configuration existante
+    try {
+      const response = await fetch(`/api/guild/<%= guild.id %>/config`);
+      const config = await response.json();
+      console.log("Configuration chargée:", config);
+      
+      // Remplir les formulaires avec les valeurs existantes
+      fillFormValues(config);
+    } catch (error) {
+      console.error("Erreur lors du chargement de la configuration:", error);
+    }
+
+    // Fonction pour remplir les formulaires
+    function fillFormValues(config) {
+      // Configuration générale
+      if (config.general) {
+        if (config.general.language) {
+          const languageSelect = document.getElementById("language");
+          if (languageSelect) languageSelect.value = config.general.language;
+        }
+        if (config.general.timezone) {
+          const timezoneSelect = document.getElementById("timezone");
+          if (timezoneSelect) timezoneSelect.value = config.general.timezone;
+        }
+        if (config.general.logChannel) {
+          const logChannelSelect = document.getElementById("logChannel");
+          if (logChannelSelect) logChannelSelect.value = config.general.logChannel;
+        }
+      }
+
+      // Configuration de modération
+      if (config.moderation) {
+        if (config.moderation.modLogChannel) {
+          const modLogChannelSelect = document.getElementById("modLogChannel");
+          if (modLogChannelSelect) modLogChannelSelect.value = config.moderation.modLogChannel;
+        }
+        if (config.moderation.autoMod && config.moderation.autoMod.length > 0) {
+          config.moderation.autoMod.forEach(modType => {
+            const checkbox = document.querySelector(`input[name="autoMod"][value="${modType}"]`);
+            if (checkbox) checkbox.checked = true;
+          });
+        }
+        if (config.moderation.muteRole) {
+          const muteRoleSelect = document.getElementById("muteRole");
+          if (muteRoleSelect) muteRoleSelect.value = config.moderation.muteRole;
+        }
+      }
+
+      // Configuration de l'économie
+      if (config.economy) {
+        if (config.economy.currencyName) {
+          const currencyNameInput = document.getElementById("currencyName");
+          if (currencyNameInput) currencyNameInput.value = config.economy.currencyName;
+        }
+        if (config.economy.currencySymbol) {
+          const currencySymbolInput = document.getElementById("currencySymbol");
+          if (currencySymbolInput) currencySymbolInput.value = config.economy.currencySymbol;
+        }
+        if (config.economy.dailyAmount) {
+          const dailyAmountInput = document.getElementById("dailyAmount");
+          if (dailyAmountInput) dailyAmountInput.value = config.economy.dailyAmount;
+        }
+        if (config.economy.workAmount) {
+          const workAmountInput = document.getElementById("workAmount");
+          if (workAmountInput) workAmountInput.value = config.economy.workAmount;
+        }
+      }
+
+      // Configuration des niveaux
+      if (config.leveling) {
+        if (config.leveling.levelChannel) {
+          const levelChannelSelect = document.getElementById("levelChannel");
+          if (levelChannelSelect) levelChannelSelect.value = config.leveling.levelChannel;
+        }
+        if (config.leveling.xpPerMessage) {
+          const xpPerMessageInput = document.getElementById("xpPerMessage");
+          if (xpPerMessageInput) xpPerMessageInput.value = config.leveling.xpPerMessage;
+        }
+        if (config.leveling.xpCooldown) {
+          const xpCooldownInput = document.getElementById("xpCooldown");
+          if (xpCooldownInput) xpCooldownInput.value = config.leveling.xpCooldown;
+        }
+      }
+
+      // Configuration de bienvenue
+      if (config.welcome) {
+        if (config.welcome.welcomeChannel) {
+          const welcomeChannelSelect = document.getElementById("welcomeChannel");
+          if (welcomeChannelSelect) welcomeChannelSelect.value = config.welcome.welcomeChannel;
+        }
+        if (config.welcome.welcomeMessage) {
+          const welcomeMessageTextarea = document.getElementById("welcomeMessage");
+          if (welcomeMessageTextarea) welcomeMessageTextarea.value = config.welcome.welcomeMessage;
+        }
+        if (config.welcome.welcomeEmbed !== undefined) {
+          const welcomeEmbedCheckbox = document.getElementById("welcomeEmbed");
+          if (welcomeEmbedCheckbox) welcomeEmbedCheckbox.checked = config.welcome.welcomeEmbed;
+        }
+        if (config.welcome.welcomeColor) {
+          const welcomeColorInput = document.getElementById("welcomeColor");
+          if (welcomeColorInput) welcomeColorInput.value = config.welcome.welcomeColor;
+        }
+      }
+    }
+
+    // Gestion des onglets
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    const tabPanes = document.querySelectorAll(".tab-pane");
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetTab = btn.getAttribute("data-tab");
+
+        // Retirer la classe active de tous les onglets
+        tabBtns.forEach((b) => b.classList.remove("active"));
+        tabPanes.forEach((p) => p.classList.remove("active"));
+
+        // Ajouter la classe active à l'onglet cliqué
+        btn.classList.add("active");
+        document.getElementById(targetTab).classList.add("active");
+      });
+    });
+
+    // Gestion des formulaires
+    const forms = document.querySelectorAll(".config-form");
+    forms.forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+
+        try {
+          const response = await fetch(`/api/guild/<%= guild.id %>/config`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+          console.log("Réponse du serveur:", result);
+
+          if (response.ok && result.success) {
+            alert("Configuration sauvegardée avec succès !");
+          } else {
+            alert(`Erreur: ${result.error || "Erreur lors de la sauvegarde"}`);
+          }
+        } catch (error) {
+          console.error("Erreur:", error);
+          alert("Erreur de connexion lors de la sauvegarde.");
+        }
+      });
+    });
+
+    // Gestion des récompenses
+    const addRewardBtn = document.getElementById("add-reward");
+    const rewardsList = document.querySelector(".rewards-list");
+
+    addRewardBtn.addEventListener("click", () => {
+      const rewardItem = document.createElement("div");
+      rewardItem.className = "reward-item";
+      rewardItem.innerHTML = `
+            <input type="number" name="rewardLevel[]" placeholder="Niveau" min="1">
+            <select name="rewardType[]">
+                <option value="role">Rôle</option>
+                <option value="coins">Coins</option>
+            </select>
+            <input type="text" name="rewardValue[]" placeholder="Valeur">
+            <button type="button" class="btn btn-danger btn-sm remove-reward">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+      rewardsList.appendChild(rewardItem);
+    });
+
+    // Suppression des récompenses
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-reward")) {
+        e.target.closest(".reward-item").remove();
+      }
+    });
+  });
+</script>

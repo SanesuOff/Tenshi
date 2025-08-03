@@ -1,0 +1,37 @@
+{
+  "name": "tenshi-bot",
+  "version": "1.0.0",
+  "description": "Bot Discord moderne avec dashboard web",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "deploy": "node src/deploy-commands.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "dashboard",
+    "javascript"
+  ],
+  "author": "Tenshi Bot",
+  "license": "MIT",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-rate-limit": "^6.10.0",
+    "express-session": "^1.17.3",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.5.0",
+    "passport": "^0.6.0",
+    "passport-discord": "^0.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
