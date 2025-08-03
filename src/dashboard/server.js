@@ -323,7 +323,7 @@ class Dashboard {
               welcomeMessage:
                 config.welcome?.message ||
                 "Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !",
-              welcomeEmbed: config.welcome?.embed || false,
+              welcomeEmbed: config.welcome?.enabled || false,
               welcomeColor: config.welcome?.color || "#7289da",
             },
           });
@@ -371,6 +371,8 @@ class Dashboard {
               channelId: req.body.welcomeChannel || null,
               message:
                 req.body.welcomeMessage || "Bienvenue {user} sur {server}!",
+              embed: req.body.welcomeEmbed === "true",
+              color: req.body.welcomeColor || "#7289da",
             },
             // Configuration de modération
             moderation: {

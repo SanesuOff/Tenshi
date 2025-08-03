@@ -530,9 +530,111 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
     color: var(--text-secondary);
     font-size: 0.875rem;
   }
+
+  /* Styles pour les notifications */
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .notification.show {
+    transform: translateX(0);
+  }
+
+  .notification.success {
+    background-color: #10b981;
+    border-left: 4px solid #059669;
+  }
+
+  .notification.error {
+    background-color: #ef4444;
+    border-left: 4px solid #dc2626;
+  }
+
+  .notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .notification-icon {
+    font-size: 1.2rem;
+  }
+
+  .notification-message {
+    flex: 1;
+  }
+
+  .notification-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .notification-close:hover {
+    opacity: 1;
+  }
 </style>
 
 <script>
+  // Fonction pour afficher les notifications
+  function showNotification(message, type = "success") {
+    // Supprimer les notifications existantes
+    const existingNotifications = document.querySelectorAll(".notification");
+    existingNotifications.forEach((notification) => notification.remove());
+
+    // Créer la notification
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+
+    const icon =
+      type === "success" ? "fas fa-check-circle" : "fas fa-exclamation-circle";
+
+    notification.innerHTML = `
+      <div class="notification-content">
+        <i class="fas ${icon} notification-icon"></i>
+        <span class="notification-message">${message}</span>
+        <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `;
+
+    // Ajouter au DOM
+    document.body.appendChild(notification);
+
+    // Afficher avec animation
+    setTimeout(() => {
+      notification.classList.add("show");
+    }, 100);
+
+    // Auto-suppression après 5 secondes
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.classList.remove("show");
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, 300);
+      }
+    }, 5000);
+  }
+
   document.addEventListener("DOMContentLoaded", async function () {
     // Charger la configuration existante
     try {
@@ -544,6 +646,10 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
       fillFormValues(config);
     } catch (error) {
       console.error("Erreur lors du chargement de la configuration:", error);
+      showNotification(
+        "Erreur lors du chargement de la configuration",
+        "error"
+      );
     }
 
     // Fonction pour remplir les formulaires
@@ -696,13 +802,23 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
           console.log("Réponse du serveur:", result);
 
           if (response.ok && result.success) {
-            alert("Configuration sauvegardée avec succès !");
+            // Créer une notification de succès plus élégante
+            showNotification(
+              "Configuration sauvegardée avec succès !",
+              "success"
+            );
           } else {
-            alert(`Erreur: ${result.error || "Erreur lors de la sauvegarde"}`);
+            showNotification(
+              `Erreur: ${result.error || "Erreur lors de la sauvegarde"}`,
+              "error"
+            );
           }
         } catch (error) {
           console.error("Erreur:", error);
-          alert("Erreur de connexion lors de la sauvegarde.");
+          showNotification(
+            "Erreur de connexion lors de la sauvegarde.",
+            "error"
+          );
         }
       });
     });
