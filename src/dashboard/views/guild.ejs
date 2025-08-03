@@ -539,7 +539,7 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
       const response = await fetch(`/api/guild/<%= guild.id %>/config`);
       const config = await response.json();
       console.log("Configuration chargée:", config);
-      
+
       // Remplir les formulaires avec les valeurs existantes
       fillFormValues(config);
     } catch (error) {
@@ -560,7 +560,8 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
         }
         if (config.general.logChannel) {
           const logChannelSelect = document.getElementById("logChannel");
-          if (logChannelSelect) logChannelSelect.value = config.general.logChannel;
+          if (logChannelSelect)
+            logChannelSelect.value = config.general.logChannel;
         }
       }
 
@@ -568,11 +569,14 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
       if (config.moderation) {
         if (config.moderation.modLogChannel) {
           const modLogChannelSelect = document.getElementById("modLogChannel");
-          if (modLogChannelSelect) modLogChannelSelect.value = config.moderation.modLogChannel;
+          if (modLogChannelSelect)
+            modLogChannelSelect.value = config.moderation.modLogChannel;
         }
         if (config.moderation.autoMod && config.moderation.autoMod.length > 0) {
-          config.moderation.autoMod.forEach(modType => {
-            const checkbox = document.querySelector(`input[name="autoMod"][value="${modType}"]`);
+          config.moderation.autoMod.forEach((modType) => {
+            const checkbox = document.querySelector(
+              `input[name="autoMod"][value="${modType}"]`
+            );
             if (checkbox) checkbox.checked = true;
           });
         }
@@ -586,19 +590,23 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
       if (config.economy) {
         if (config.economy.currencyName) {
           const currencyNameInput = document.getElementById("currencyName");
-          if (currencyNameInput) currencyNameInput.value = config.economy.currencyName;
+          if (currencyNameInput)
+            currencyNameInput.value = config.economy.currencyName;
         }
         if (config.economy.currencySymbol) {
           const currencySymbolInput = document.getElementById("currencySymbol");
-          if (currencySymbolInput) currencySymbolInput.value = config.economy.currencySymbol;
+          if (currencySymbolInput)
+            currencySymbolInput.value = config.economy.currencySymbol;
         }
         if (config.economy.dailyAmount) {
           const dailyAmountInput = document.getElementById("dailyAmount");
-          if (dailyAmountInput) dailyAmountInput.value = config.economy.dailyAmount;
+          if (dailyAmountInput)
+            dailyAmountInput.value = config.economy.dailyAmount;
         }
         if (config.economy.workAmount) {
           const workAmountInput = document.getElementById("workAmount");
-          if (workAmountInput) workAmountInput.value = config.economy.workAmount;
+          if (workAmountInput)
+            workAmountInput.value = config.economy.workAmount;
         }
       }
 
@@ -606,35 +614,44 @@ Bienvenue {user} sur {server} ! Tu es le {memberCount}ème membre !</textarea
       if (config.leveling) {
         if (config.leveling.levelChannel) {
           const levelChannelSelect = document.getElementById("levelChannel");
-          if (levelChannelSelect) levelChannelSelect.value = config.leveling.levelChannel;
+          if (levelChannelSelect)
+            levelChannelSelect.value = config.leveling.levelChannel;
         }
         if (config.leveling.xpPerMessage) {
           const xpPerMessageInput = document.getElementById("xpPerMessage");
-          if (xpPerMessageInput) xpPerMessageInput.value = config.leveling.xpPerMessage;
+          if (xpPerMessageInput)
+            xpPerMessageInput.value = config.leveling.xpPerMessage;
         }
         if (config.leveling.xpCooldown) {
           const xpCooldownInput = document.getElementById("xpCooldown");
-          if (xpCooldownInput) xpCooldownInput.value = config.leveling.xpCooldown;
+          if (xpCooldownInput)
+            xpCooldownInput.value = config.leveling.xpCooldown;
         }
       }
 
       // Configuration de bienvenue
       if (config.welcome) {
         if (config.welcome.welcomeChannel) {
-          const welcomeChannelSelect = document.getElementById("welcomeChannel");
-          if (welcomeChannelSelect) welcomeChannelSelect.value = config.welcome.welcomeChannel;
+          const welcomeChannelSelect =
+            document.getElementById("welcomeChannel");
+          if (welcomeChannelSelect)
+            welcomeChannelSelect.value = config.welcome.welcomeChannel;
         }
         if (config.welcome.welcomeMessage) {
-          const welcomeMessageTextarea = document.getElementById("welcomeMessage");
-          if (welcomeMessageTextarea) welcomeMessageTextarea.value = config.welcome.welcomeMessage;
+          const welcomeMessageTextarea =
+            document.getElementById("welcomeMessage");
+          if (welcomeMessageTextarea)
+            welcomeMessageTextarea.value = config.welcome.welcomeMessage;
         }
         if (config.welcome.welcomeEmbed !== undefined) {
           const welcomeEmbedCheckbox = document.getElementById("welcomeEmbed");
-          if (welcomeEmbedCheckbox) welcomeEmbedCheckbox.checked = config.welcome.welcomeEmbed;
+          if (welcomeEmbedCheckbox)
+            welcomeEmbedCheckbox.checked = config.welcome.welcomeEmbed;
         }
         if (config.welcome.welcomeColor) {
           const welcomeColorInput = document.getElementById("welcomeColor");
-          if (welcomeColorInput) welcomeColorInput.value = config.welcome.welcomeColor;
+          if (welcomeColorInput)
+            welcomeColorInput.value = config.welcome.welcomeColor;
         }
       }
     }
